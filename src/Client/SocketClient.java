@@ -10,7 +10,6 @@ import java.net.UnknownHostException;
 
 /**
  * A Simple Socket client that connects to our socket server
- * @author faheem
  *
  */
 public class SocketClient {

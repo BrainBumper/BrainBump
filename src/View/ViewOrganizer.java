@@ -1,4 +1,5 @@
 package View;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
@@ -8,6 +9,8 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import Server.SocketServer;
 
 public class ViewOrganizer extends JPanel implements ComponentListener
 {
@@ -25,7 +28,7 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 	private JPanel ideaPageView;
 	private JPanel textCreateView;
 	
-	//public SocketServer server;
+	public SocketServer server;
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -87,8 +90,8 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 	}
 	
 	@Override
-	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+	public void componentHidden(ComponentEvent arg0)
+	{
 		
 	}
 

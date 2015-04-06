@@ -10,7 +10,6 @@ import java.net.Socket;
 
 /**
 * A simple socket server
-* @author faheem
 *
 */
 public class SocketServer {
