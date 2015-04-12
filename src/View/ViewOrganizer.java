@@ -74,7 +74,7 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 	public SessionCreateView getSessionCreateView(){
 		sessionCreateView = new SessionCreateView();
 		sessionCreateView.addComponentListener(this);
-		sessionCreateView.setPreferredSize(sessionListView.getSize());
+		sessionCreateView.setPreferredSize(sessionCreateView.getSize());
 		return(sessionCreateView);
 	}
 	
@@ -112,6 +112,40 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 		}
 		window.validate();
 		window.pack();
+		
+		if (e.getSource() == regView){
+			mainPanel.remove(regView);
+			if(regView.addLoginPanel()){
+				mainPanel.add(getLoginView(), BorderLayout.CENTER);
+			}
+		}
+		if (e.getSource() == sessionListView){
+			mainPanel.remove(sessionListView);
+			if (sessionListView.addLogOut()){
+				mainPanel.add(getLoginView(), BorderLayout.CENTER);
+			}
+		}
+		
+		if (e.getSource() == sessionListView){
+			mainPanel.remove(sessionListView);
+			if (sessionListView.addCreateNewSesh()){
+				mainPanel.add(getSessionCreateView(), BorderLayout.CENTER);
+			}
+		}
+		
+		if (e.getSource() == sessionListView){
+			mainPanel.remove(sessionListView);
+			if(sessionListView.joinNewSesh()){
+				mainPanel.add(getMainClientView(), BorderLayout.CENTER);
+			}
+		}
+		
+		if (e.getSource() == sessionCreateView){
+			mainPanel.remove(sessionCreateView);
+			if(sessionCreateView.addCancel()){
+				mainPanel.add(getSessionListView(),BorderLayout.CENTER);
+			}
+		}
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package View;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -8,6 +10,9 @@ import javax.swing.table.*;
 public class SessionListView extends JPanel
 {
 	private boolean DEBUG = false;
+	public boolean addLogOut = false;
+	public boolean addNewSesh = false;
+	public boolean joinSesh = false;
 	
 	public SessionListView()
 	{
@@ -34,9 +39,30 @@ public class SessionListView extends JPanel
 	        
 	        JPanel southPanel = new JPanel();
 	        
-	        southPanel.add(new JButton("Log Out"));
-	        southPanel.add(new JButton("Create New Session"));
-	        southPanel.add(new JButton("Join Session"));
+	        JButton logOutButton = (JButton) southPanel.add(new JButton("Log Out"));
+	        logOutButton.addActionListener(new ActionListener(){ // action Listen for JButton #1
+				public void actionPerformed(ActionEvent e) { // 
+					addLogOut = true;
+					hidePanel();			
+				}		
+			});
+	        
+	        JButton newSessionButton = (JButton) southPanel.add(new JButton("Create New Session"));
+	        newSessionButton.addActionListener(new ActionListener(){ // action Listen for JButton #2
+				public void actionPerformed(ActionEvent e) { // 
+					addNewSesh = true;
+					hidePanel();			
+				}		
+			});
+	        
+	        
+	        JButton joinSessionButton = (JButton) southPanel.add(new JButton("Join Session"));
+	        joinSessionButton.addActionListener(new ActionListener(){ // action Listen for JButton #2
+				public void actionPerformed(ActionEvent e) { // 
+					joinSesh = true;
+					hidePanel();			
+				}		
+			});
 	        
 	        add(southPanel, BorderLayout.SOUTH);
 	}
@@ -131,4 +157,22 @@ public class SessionListView extends JPanel
         }
 	    
 	 }
+	 private void hidePanel(){
+			setVisible(false);
+	}
+
+	public boolean addLogOut() {
+		return addLogOut;
+	}
+
+	public boolean addCreateNewSesh() {
+		return addNewSesh;
+	}
+	
+	public boolean joinNewSesh(){
+		return joinSesh;
+	}
+	
+	
+
 }

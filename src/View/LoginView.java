@@ -56,7 +56,7 @@ public class LoginView extends JPanel
 		JButton registerButton = new JButton("register");
 		registerButton.setBounds(180, 80, 80, 25);
 		registerButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) { // 
 				addReg = true;
 				hidePanel();			
 			}		

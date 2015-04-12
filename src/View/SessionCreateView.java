@@ -1,5 +1,7 @@
 package View;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -7,6 +9,7 @@ import javax.swing.table.*;
 public class SessionCreateView extends JPanel
 {
 	private boolean DEBUG = false;
+	public boolean addCancel = false;
 	
 	public SessionCreateView()
 	{
@@ -33,7 +36,14 @@ public class SessionCreateView extends JPanel
 	     
 	        JPanel southPanel = new JPanel();
 	        
-	        southPanel.add(new JButton("Cancel"));
+	        JButton cancelButton = (JButton) southPanel.add(new JButton("Cancel"));
+	        cancelButton.addActionListener(new ActionListener(){ // action Listen for JButton #2
+				public void actionPerformed(ActionEvent e) { // 
+					addCancel = true;
+					hidePanel();			
+				}		
+			});
+	        
 	        southPanel.add(new JButton("Create Session"));
 	        
 	        add(southPanel, BorderLayout.SOUTH);
@@ -130,4 +140,12 @@ public class SessionCreateView extends JPanel
 		 }
 
 	 }
+
+	public boolean addCancel() {
+		return addCancel;
+	}
+	
+	public void hidePanel(){
+		setVisible(false);
+	}
 }
