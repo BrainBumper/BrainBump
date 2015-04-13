@@ -1,10 +1,11 @@
-package Client;
+package client;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -14,54 +15,61 @@ import java.net.UnknownHostException;
  */
 public class SocketClient {
 
-    private String hostname;
-    private int port;
-    Socket socketClient;
+	private String hostname, username;
+	private int port;
 
-    public SocketClient(String hostname, int port){
-        this.hostname = hostname;
-        this.port = port;
-    }
+	Socket socketClient;
 
-    public void connect() throws UnknownHostException, IOException{
-        System.out.println("Attempting to connect to "+hostname+":"+port);
-        socketClient = new Socket(hostname,port);
-        System.out.println("Connection Established");
-    }
+	public SocketClient(String hostname, String username, int port){
+		this.hostname = hostname;
+		this.username = username;
+		this.port = port;
 
-    public void readResponse() throws IOException{
-        String userInput;
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
+		try {
+			//trying to establish connection to the server
+			connect();
+			//asking server for time
+			askForTime();            
+			//if successful, read response from server
+			readResponse();
 
-        System.out.print("RESPONSE FROM SERVER:");
-        while ((userInput = stdIn.readLine()) != null) {
-            System.out.println(userInput);
-        }
-     }
-    
-    public void askForTime() throws IOException{
-        BufferedWriter writer = new BufferedWriter(
-        		new OutputStreamWriter(socketClient.getOutputStream()));
-           writer.write("TIME?");
-           writer.newLine();
-           writer.flush();
-        }
+		} catch (UnknownHostException e) {
+			System.err.println("Host unknown. Cannot establish connection");
+		} catch (IOException e) {
+			System.err.println("Cannot establish connection. Server may not be up."+e.getMessage());
+		}
+	}
 
-    public static void main(String arg[]){
-        //Creating a SocketClient object
-        SocketClient client = new SocketClient ("localhost",6780);
-        try {
-            //trying to establish connection to the server
-            client.connect();
-            //asking server for time
-            client.askForTime();            
-            //if successful, read response from server
-            client.readResponse();
+	public void connect() throws UnknownHostException, IOException{
+		System.out.println("Attempting to connect to "+hostname+":"+port);
+		socketClient = new Socket(hostname,port);
+		System.out.println("Connection Established");
+	}
 
-        } catch (UnknownHostException e) {
-            System.err.println("Host unknown. Cannot establish connection");
-        } catch (IOException e) {
-            System.err.println("Cannot establish connection. Server may not be up."+e.getMessage());
-        }
-    }
+	public void readResponse() throws IOException{
+		String userInput;
+		BufferedReader stdIn = new BufferedReader(
+				new InputStreamReader(socketClient.getInputStream()));
+		System.out.print("RESPONSE FROM SERVER:");
+		while ((userInput = stdIn.readLine()) != null) {
+			System.out.println(userInput);
+		}
+	}
+
+	public void askForTime() throws IOException{
+		BufferedWriter writer = new BufferedWriter(
+				new OutputStreamWriter(socketClient.getOutputStream()));
+		writer.write("TIME?");
+		writer.newLine();
+		writer.flush();
+	}
+
+	public String getUsername(){
+		return username;
+	}
+
+	//    public static void main(String arg[]){
+	//        //Creating a SocketClient object
+	//        SocketClient client = new SocketClient("localhost",6780);
+
 }

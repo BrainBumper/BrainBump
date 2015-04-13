@@ -1,15 +1,18 @@
-package View;
+package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
 
 public class RegisterView extends JPanel
 {
+	private boolean addLogin = false;
 	public RegisterView()
 	{
-this.setLayout(new BorderLayout());
+		this.setLayout(new BorderLayout());
 		
 		setSize(310, 160);
 		JPanel panel = new JPanel();
@@ -18,7 +21,7 @@ this.setLayout(new BorderLayout());
 		placeComponents(panel);
 	}
 
-	private static void placeComponents(JPanel panel)
+	private void placeComponents(JPanel panel)
 	{
 		panel.setLayout(null);
 
@@ -48,6 +51,20 @@ this.setLayout(new BorderLayout());
 		
 		JButton registerButton = new JButton("Create Account");
 		registerButton.setBounds(90, 120, 140, 25);
-		panel.add(registerButton);
+		registerButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				addLogin = true;
+				hidePanel();			
+			}		
+		});
+		panel.add(registerButton);		
+		}
+	
+	public void hidePanel() {
+		setVisible(false);
+	}
+
+	public boolean addLoginPanel(){
+		return addLogin;
 	}
 }

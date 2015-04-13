@@ -1,20 +1,36 @@
-package View;
+package view;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.InetAddress;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.table.*;
+
+import server.SocketServer;
+import model.SessionCreateModel;
 
 public class SessionCreateView extends JPanel
 {
-	private boolean DEBUG = false;
+	private SessionCreateModel model;
 	
-	public SessionCreateView()
-	{
+	private boolean DEBUG = false;
+	public boolean addCancel = false;
+	
+	private JButton cancelButton, createButton;
+	
+	private JTable table;
+	
+	public SessionCreateView(SessionCreateModel model)
+	{		
 		super(new BorderLayout());
+		this.model = model;
+		
 		setSize(500,300);
 		this.setBorder(new TextBubbleBorder(Color.blue, 5, 10, 0));
 		
-		 JTable table = new JTable(new MyTableModel());
+		 table = new JTable(new MyTableModel());
 	        table.setPreferredScrollableViewportSize(new Dimension(500, 150));
 	        table.setFillsViewportHeight(true);
 	        
@@ -29,25 +45,44 @@ public class SessionCreateView extends JPanel
 	        //Add the scroll pane to this panel.
 	        add(scrollPane);
 	        
-	        add(table, BorderLayout.NORTH);
+	        table.setDefaultEditor(Integer.class, new IntegerEditor(0, 25));
+	        
+	        add(scrollPane, BorderLayout.NORTH);
 	     
 	        JPanel southPanel = new JPanel();
 	        
-	        southPanel.add(new JButton("Cancel"));
-	        southPanel.add(new JButton("Create Session"));
+	        cancelButton = (JButton) southPanel.add(new JButton("Cancel"));
+	        cancelButton.addActionListener(new ActionListener(){ // action Listen for JButton #2
+				public void actionPerformed(ActionEvent e) { // 
+					addCancel = true;
+					hidePanel();			
+				}		
+			});
+	        
+	        createButton = (JButton) southPanel.add(new JButton("Create Session"));
+	        createButton.addActionListener(new ActionListener(){
+	        	public void actionPerformed(ActionEvent e) {
+	        		controlModel();
+	        		hidePanel();
+	        	}
+	        });
 	        
 	        add(southPanel, BorderLayout.SOUTH);
 	}
 	
+	private void controlModel(){
+		model.setServer(new SocketServer(6780, (Integer)table.getValueAt(0, 1),
+				(String)table.getValueAt(0,0), (String)table.getValueAt(0,2)));
+	}
+	
 	 class MyTableModel extends AbstractTableModel {
 
-		 private String[] columnNames = {"Category", 
-				 						"Value"};
+		 private String[] columnNames = {"Session Name", 
+				 						"Num. Participants (1-25)",
+				 						"Password"};
 
 		 private Object[][] data = {
-				 {"Session Name", null},
-				 {"Num. Participants", null},
-				 {"Password", null}
+				 {"MyServer", new Integer(25), ""}				
 		 };
 
 		 @Override
@@ -87,11 +122,7 @@ public class SessionCreateView extends JPanel
 		 public boolean isCellEditable(int row, int col) {
 			 //Note that the data/cell address is constant,
 			 //no matter where the cell appears onscreen.
-			 if (col < 2) {
-				 return false;
-			 } else {
-				 return true;
-			 }
+				return true;
 		 }
 
 		 /*
@@ -130,4 +161,13 @@ public class SessionCreateView extends JPanel
 		 }
 
 	 }
+
+	public boolean addCancel() {
+		return addCancel;
+	}
+	
+	public void hidePanel(){
+		setVisible(false);
+	}	    
+	    
 }
