@@ -1,4 +1,4 @@
-package View;
+package view;
 import java.awt.*;
 
 import javax.swing.*;
@@ -49,11 +49,12 @@ public class IdeaPageView extends JPanel
 		JPanel comment2 = new JPanel();
 		comment2.setLayout(new BorderLayout());
 		
-		comment2.add(new JButton("This isn't fair because people with big hands"
-				+ " will get more lemonade than people with small hands"), BorderLayout.CENTER);
+		comment2.add(new JButton("This is one of the most intelligent ideas this company has ever seen, "
+				+ "and I can't imagine anything less than this redefining the lemonade stand industry as "
+				+ "we know it. Great work."), BorderLayout.CENTER);
 		
 		JPanel ratingPanel2 = new JPanel();
-		setRatingPanel(ratingPanel2, 3);
+		setRatingPanel(ratingPanel2, 300);
 		comment2.add(ratingPanel2, BorderLayout.EAST);
 		
 		commentPanel.add(comment1);

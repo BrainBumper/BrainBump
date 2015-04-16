@@ -1,4 +1,4 @@
-package View;
+package view;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
