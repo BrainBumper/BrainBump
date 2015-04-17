@@ -32,10 +32,10 @@ public class Storage {
 		
 		String[] compactIdeas = new String[session.getNumIdeas()];		//Puts data into a String[]
 		System.out.println(session.getNumIdeas());
-		for(int i = 0; i < session.getNumIdeas(); i++){				//Idea
+		for(int i = 0; i < session.getNumIdeas(); i++){	//Idea
 			Idea focus = session.getIdeas()[i];
-			String current = focus.getString()+"|"+focus.getAuthor()+"|"+focus.getGroupNum()+"|"+focus.getRating()+"|"+focus.getNum()+"|"+focus.getDoc()+"|"+Boolean.toString(focus.isFav())+"|";
-			for(int q = 0; q<focus.getcNum();q++){
+			String current = focus.getString()+"|"+focus.getAuthor()+"|"+focus.getGroupNum()+"|"+focus.getRating()+"|"+focus.getOrder()+"|"+focus.getDoc().getPath()+"|"+Boolean.toString(focus.isFav())+"|"+focus.getNumComments();
+			for(int q = 0; q<focus.getNumComments();q++){
 				current=current+focus.getComments()[q]+"*";
 			}
 			compactIdeas[i] = current;
@@ -51,7 +51,7 @@ public class Storage {
 			compactChat[i] = session.getChatWindow().getComments()[i];
 		}
 		
-		try{						//Writing into the file
+		try{			//Writing into the file
 			
 			
 			for(int i = 0; i < compactIdeas.length;i++){
@@ -93,26 +93,19 @@ public class Storage {
 			else
 				what = line.substring(0, line.indexOf(":"));
 			if(what.equals("Ideas")){							//Stored idea
-				Idea current = new Idea(1);
+				
 				working = line.substring(line.indexOf(":")+1);
 				String[] parts = working.split("\\|");
-				current.setString(parts[0]);
-				current.setAuthor(parts[1]);
-				current.setGroup(parts[2]); 
-				current.setRating(Integer.parseInt(parts[3]));
-				current.setNum(Integer.parseInt(parts[4]));
-				current.setDoc(parts[5]);
-				current.setFav(Boolean.getBoolean(parts[6]));
 				String[] comm = parts[7].split("\\*");
-				current.setComments(comm);
-				current.setcNum(comm.length);
+				Idea current = new Idea(parts[0],parts[1],Integer.parseInt(parts[2]),Integer.parseInt(parts[3]),Integer.parseInt(parts[4]),parts[5],Boolean.getBoolean(parts[6]),comm.length,comm);
+				
 				session.addIdea(current);
 			}else if(what.equals("Users")){						//Stored user
+				User current = new User(1);
 				working = line.substring(line.indexOf(":")+1);
-				String[] splitLine = working.split("\\|");
-				User current = new User(splitLine[0],splitLine[1]);
-				current.setID(splitLine[0]);
-				current.setPass(splitLine[1]);
+				String[] sp = working.split("\\|");
+				current.setID(sp[0]);
+				current.setPass(sp[1]);
 				session.addUser(current);
 			}else if(what.equals("Chat")){						//Stored chat comments
 				ChatWindow current = session.getChatWindow();
