@@ -150,8 +150,14 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 				mainPanel.add(getMainClientView(), BorderLayout.CENTER);
 			}
 		}
+		
+		if (e.getSource() == mainClientView){
+			mainPanel.remove(mainClientView);
+			mainPanel.add(getIdeaPageView(), BorderLayout.CENTER);
+		}
 		window.validate();
 		window.pack();
+		window.setLocationRelativeTo(null);
 	}
 
 	@Override

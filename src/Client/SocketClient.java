@@ -29,7 +29,7 @@ public class SocketClient {
 			//trying to establish connection to the server
 			connect();
 			//asking server for time
-			askForTime();            
+			sendName();           
 			//if successful, read response from server
 			readResponse();
 
@@ -47,19 +47,19 @@ public class SocketClient {
 	}
 
 	public void readResponse() throws IOException{
-		String userInput;
+		String serverInput;
 		BufferedReader stdIn = new BufferedReader(
 				new InputStreamReader(socketClient.getInputStream()));
 		System.out.print("RESPONSE FROM SERVER:");
-		while ((userInput = stdIn.readLine()) != null) {
-			System.out.println(userInput);
+		while ((serverInput = stdIn.readLine()) != null) {
+			System.out.println(serverInput);
 		}
 	}
 
-	public void askForTime() throws IOException{
+	public void sendName() throws IOException{
 		BufferedWriter writer = new BufferedWriter(
 				new OutputStreamWriter(socketClient.getOutputStream()));
-		writer.write("TIME?");
+		writer.write(username);
 		writer.newLine();
 		writer.flush();
 	}
@@ -67,9 +67,5 @@ public class SocketClient {
 	public String getUsername(){
 		return username;
 	}
-
-	//    public static void main(String arg[]){
-	//        //Creating a SocketClient object
-	//        SocketClient client = new SocketClient("localhost",6780);
 
 }

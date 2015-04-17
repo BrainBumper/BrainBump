@@ -13,6 +13,8 @@ public class User
 	public User(String user, String pass){
 		this.username = user;
 		this.password = pass;
+		
+		client = new SocketClient("camlaptop",username,6780);
 	}
 	
 	public void setServer(SocketServer server){

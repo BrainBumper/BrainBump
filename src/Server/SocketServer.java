@@ -9,15 +9,18 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.*;
+
+import view.SessionCreateView;
 
 /**
 * A simple socket server
 *
 */
-public class SocketServer {
-    
+public class SocketServer{
+	
     private ServerSocket serverSocket;
-    private int port, maxClients, currentClients;
+    private int port, maxClients;
     private String name, password, hostname;
     
     public SocketServer(int port, int maxClients, String name, String password) {
@@ -34,8 +37,6 @@ public class SocketServer {
 			e1.printStackTrace();
 		}
         
-        currentClients = 0;
-        
         try {
 			start();
 		} catch (IOException e) {
@@ -44,22 +45,54 @@ public class SocketServer {
     }
     
     public void start() throws IOException {
-        System.out.println("Starting the socket server at port:" + port +
-        		"\n name: " + name +
-        		"\n password: " + password +
-        		"\n maxClients: " + maxClients);
-        serverSocket = new ServerSocket(port);
-        
-        Socket client = null;
-        
-        while(true){
-        	System.out.println("Waiting for clients...");
-        	client = serverSocket.accept();
-        	currentClients++;
-        	System.out.println("The following client has connected:"
-        			+client.getInetAddress().getCanonicalHostName());
-            Thread thread = new Thread(new SocketClientHandler(client));
-            thread.start();
-        }     
+    	final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(maxClients);
+    	
+        Runnable serverTask = new Runnable() {
+            @SuppressWarnings("resource")
+			@Override
+            public void run() {
+                try {
+                    ServerSocket serverSocket = new ServerSocket(port);
+                    
+                    System.out.println("Starting the socket server at port:" + port +
+                    		"\n name: " + name +
+                    		"\n password: " + password +
+                    		"\n maxClients: " + maxClients);
+                    
+                    System.out.println("Waiting for clients to connect...");
+                    while (true) {
+                        Socket clientSocket = serverSocket.accept();
+                        clientProcessingPool.submit(new ClientTask(clientSocket));
+                    }
+                } catch (IOException e) {
+                    System.err.println("Unable to process client request");
+                    e.printStackTrace();
+                }
+            }
+        };
+        Thread serverThread = new Thread(serverTask);
+        serverThread.start();
     }
+    
+    private class ClientTask implements Runnable {
+        private final Socket clientSocket;
+
+        private ClientTask(Socket clientSocket) {
+            this.clientSocket = clientSocket;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("Got a client !");
+
+            // Do whatever required to process the client's request
+
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
