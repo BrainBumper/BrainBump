@@ -6,21 +6,28 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.*;
 
+import model.MainClientModel;
+
 
 public class TabbedCenterPanes extends JTabbedPane implements ComponentListener
 {
-	private JComponent main, group;
-	public TabbedCenterPanes()
+	private MainIdeaGrid main;
+	private IdeaGroupGrid group;
+	
+	private MainClientModel model;
+	
+	public TabbedCenterPanes(MainClientModel model)
 	{
-		main = new MainIdeaGrid();
-		main.addComponentListener(this);
+		this.model = model;
+		main = new MainIdeaGrid(model);
 		addTab("Main", null, main,
                 "Main Page for Ideas");
+		main.addComponentListener(this);
 		
-		group = new IdeaGroupGrid();
-		group.addComponentListener(this);
+		group = new IdeaGroupGrid(model);
 		addTab("Groups", null, group,
 				"Idea Groupings");
+		group.addComponentListener(this);
 		
 		setVisible(true);
 	}
@@ -28,7 +35,9 @@ public class TabbedCenterPanes extends JTabbedPane implements ComponentListener
 	@Override
 	public void componentHidden(ComponentEvent e) {
 		if (e.getSource() == main){
-			//setVisible(false);
+			if (main.getAddIdeaPage()){
+				setVisible(false);	
+			}
 		}
 		
 	}

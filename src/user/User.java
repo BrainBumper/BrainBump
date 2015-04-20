@@ -7,6 +7,8 @@ public class User
 {
 	private String username, password;
 	
+	private boolean admin = false;
+	
 	private SocketServer server = null;
 	private SocketClient client = null;
 	
@@ -27,6 +29,14 @@ public class User
 	
 	public String getUsername(){
 		return username;
+	}
+	
+	public void setAdmin(boolean admin){
+		this.admin = admin;
+	}
+	
+	public boolean getAdmin(){
+		return admin;
 	}
 	
 }

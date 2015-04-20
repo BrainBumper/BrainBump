@@ -5,35 +5,42 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import model.MainClientModel;
+
 
 public class UserListView extends JPanel
 {
 	private boolean DEBUG = false;
 	
-	public UserListView()
+	private JTable userTable;
+	
+	private JPanel southPanel;
+	
+	private MainClientModel model;
+	
+	public UserListView(MainClientModel model)
 	{
 		super(new BorderLayout());
+		this.model = model;
 		setBorder(new TextBubbleBorder(Color.blue, 5, 10, 0));
 		
-		JTable table = new JTable(new MyTableModel());
-        //table.setPreferredScrollableViewportSize(new Dimension(500, 150));
-        table.setFillsViewportHeight(true);
+		userTable = new JTable(new MyTableModel());
+        userTable.setPreferredScrollableViewportSize(new Dimension(200, 250));
+        userTable.setFillsViewportHeight(true);
         
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-		table.setDefaultRenderer(String.class, centerRenderer); 
+		userTable.setDefaultRenderer(String.class, centerRenderer); 
  
         //Create the scroll pane and add the table to it.
-        JScrollPane scrollPane = new JScrollPane(table);
- 
-        //Add the scroll pane to this panel.
-        add(scrollPane);
+        JScrollPane scrollPane = new JScrollPane(userTable);
         
-        add(table, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.NORTH);
         
-        JPanel southPanel = new JPanel();
+        southPanel = new JPanel();
         
-        southPanel.add(new JButton("Remove User"));
+        if (model.isAdmin())
+        	southPanel.add(new JButton("Remove User"));
         
         add(southPanel, BorderLayout.SOUTH);
 	}
@@ -86,11 +93,7 @@ public class UserListView extends JPanel
 		 public boolean isCellEditable(int row, int col) {
 			 //Note that the data/cell address is constant,
 			 //no matter where the cell appears onscreen.
-			 if (col < 2) {
-				 return false;
-			 } else {
-				 return true;
-			 }
+			 return false;
 		 }
 
 		 /*

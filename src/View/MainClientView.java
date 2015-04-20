@@ -5,30 +5,41 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.*;
 
+import model.MainClientModel;
+
 
 public class MainClientView extends JPanel implements ComponentListener
 {
 	TabbedCenterPanes tabbedPanes;
+	MainButtons mainButtons;
+	UserListView userListView;
+	ChatView chatView;
+	IdeaPageView ideaPage;
 	
-	public MainClientView()
-	{
+	MainClientModel model;
+	
+	public MainClientView(MainClientModel model)
+	{	
 		super(new BorderLayout());
+		this.model = model;
 		setBorder(new TextBubbleBorder(Color.blue, 5, 10, 0));
 		setSize(1200, 600);
 		
-		add(tabbedPanes = new TabbedCenterPanes(), BorderLayout.CENTER);
+		add(tabbedPanes = new TabbedCenterPanes(model), BorderLayout.CENTER);
 		tabbedPanes.addComponentListener(this);
-		add(new MainButtons(), BorderLayout.SOUTH);
-		add(new UserListView(), BorderLayout.WEST);
-		add(new ChatView(), BorderLayout.EAST);
+		add(mainButtons = new MainButtons(model), BorderLayout.SOUTH);
+		add(userListView = new UserListView(model), BorderLayout.WEST);
+		add(chatView = new ChatView(model), BorderLayout.EAST);
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
 		if (e.getSource() == tabbedPanes){
-			//setVisible(false);
+			remove(tabbedPanes);
+			add(ideaPage = new IdeaPageView(), BorderLayout.CENTER);
 		}
 		
+		validate();	
 	}
 
 	@Override

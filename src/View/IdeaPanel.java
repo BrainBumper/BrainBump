@@ -7,11 +7,15 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.*;
 
+import model.MainClientModel;
+
 
 public class IdeaPanel extends JPanel
 {
 	private String ideaText;
 	private int rating;
+	
+	private boolean addIdeaPage = false;
 	
 	private boolean starred = false;
 	
@@ -19,9 +23,12 @@ public class IdeaPanel extends JPanel
 	JLabel ratingLabel;
 	JButton idea, upButton, dButton, starButton, removeButton;
 	
-	public IdeaPanel(String ideaText, int rating)
+	private MainClientModel model;
+	
+	public IdeaPanel(String ideaText, int rating, MainClientModel model)
 	{
 		super (new BorderLayout());
+		this.model = model;
 		setBorder(new TextBubbleBorder(Color.blue, 3, 10, 0));
 		
 		this.ideaText = ideaText;
@@ -29,7 +36,8 @@ public class IdeaPanel extends JPanel
 		
 		idea = new JButton(ideaText);
 		idea.addActionListener(new ActionListener(){ // action Listen for JButton #2
-			public void actionPerformed(ActionEvent e) { // 
+			public void actionPerformed(ActionEvent e) {
+				addIdeaPage = true;
 				setVisible(false);	
 			}		
 		});
@@ -40,9 +48,11 @@ public class IdeaPanel extends JPanel
 		setRatingPanel(ratingPanel);
 		add(ratingPanel, BorderLayout.EAST);
 		
-		adminPanel = new JPanel();
-		setAdminPanel(adminPanel);
-		add(adminPanel, BorderLayout.WEST);
+		if (model.isAdmin()){
+			adminPanel = new JPanel();
+			setAdminPanel(adminPanel);
+			add(adminPanel, BorderLayout.WEST);
+		}
 	}
 	
 	private void setRatingPanel(JPanel ratingPanel)
@@ -105,5 +115,9 @@ public class IdeaPanel extends JPanel
 	
 	private void setRatingLabel(int add){
 		ratingLabel.setText(Integer.toString(rating += add));
+	}
+	
+	public boolean getAddIdeaPage(){
+		return addIdeaPage;
 	}
 }

@@ -81,18 +81,19 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 	}
 	
 	public MainClientView getMainClientView(){
-		mainClientView = new MainClientView();
+		mainClientView = new MainClientView(
+				new MainClientModel(user));
 		mainClientView.addComponentListener(this);
 		mainClientView.setPreferredSize(mainClientView.getSize());
 		return(mainClientView);
 	}
 	
-	public IdeaPageView getIdeaPageView(){
-		ideaPageView = new IdeaPageView();
-		ideaPageView.addComponentListener(this);
-		ideaPageView.setPreferredSize(ideaPageView.getSize());
-		return(ideaPageView);
-	}
+//	public IdeaPageView getIdeaPageView(){
+//		ideaPageView = new IdeaPageView();
+//		ideaPageView.addComponentListener(this);
+//		ideaPageView.setPreferredSize(ideaPageView.getSize());
+//		return(ideaPageView);
+//	}
 	
 	public TextCreateView getTextCreateView(){
 		textCreateView = new TextCreateView();
@@ -124,21 +125,11 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 			mainPanel.remove(sessionListView);
 			if (sessionListView.addLogOut()){
 				mainPanel.add(getLoginView(), BorderLayout.CENTER);
-			}
-		}
-		
-		if (e.getSource() == sessionListView){
-			mainPanel.remove(sessionListView);
-			if (sessionListView.addCreateNewSesh()){
+			}else if (sessionListView.addCreateNewSesh()){
 				mainPanel.add(getSessionCreateView(), BorderLayout.CENTER);
-			}
-		}
-		
-		if (e.getSource() == sessionListView){
-			mainPanel.remove(sessionListView);
-			if(sessionListView.joinNewSesh()){
+			}else{
 				mainPanel.add(getMainClientView(), BorderLayout.CENTER);
-			}
+			}	
 		}
 		
 		if (e.getSource() == sessionCreateView){
@@ -147,14 +138,11 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 				mainPanel.add(getSessionListView(),BorderLayout.CENTER);
 			}
 			else{
+				user.setAdmin(true);
 				mainPanel.add(getMainClientView(), BorderLayout.CENTER);
 			}
 		}
-		
-		if (e.getSource() == mainClientView){
-			mainPanel.remove(mainClientView);
-			mainPanel.add(getIdeaPageView(), BorderLayout.CENTER);
-		}
+
 		window.validate();
 		window.pack();
 		window.setLocationRelativeTo(null);
