@@ -15,7 +15,7 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 {
 	public static JFrame window;
 	private static JPanel mainPanel = new JPanel();
-	
+
 	private static LoginView loginView;
 	private static RegisterView regView;
 	private static SessionListView sessionListView;
@@ -24,9 +24,9 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 	private static MainClientView mainAdminView;
 	private static IdeaPageView ideaPageView;
 	private static TextCreateView textCreateView;
-	
+
 	public User user;
-	
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -40,38 +40,38 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 			}
 		});
 	}
-	
+
 	public JPanel getMainPanel(){
 		return mainPanel;
 	}
-	
+
 	public ViewOrganizer(){
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.add(getLoginView(), BorderLayout.CENTER);
 		setVisible(true);
 	}
-	
+
 	public LoginView getLoginView(){
 		loginView = new LoginView(new LoginModel());
 		loginView.addComponentListener(this);
 		loginView.setPreferredSize(loginView.getSize());
 		return(loginView);
 	}
-	
+
 	public RegisterView getRegView(){
 		regView = new RegisterView();
 		regView.addComponentListener(this);
 		regView.setPreferredSize(regView.getSize());
 		return(regView);
 	}
-	
+
 	public SessionListView getSessionListView(){
 		sessionListView = new SessionListView(new SessionListModel(user));
 		sessionListView.addComponentListener(this);
 		sessionListView.setPreferredSize(sessionListView.getSize());
 		return(sessionListView);
 	}
-	
+
 	public SessionCreateView getSessionCreateView(){
 		sessionCreateView = new SessionCreateView(
 				new SessionCreateModel(user));
@@ -79,7 +79,7 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 		sessionCreateView.setPreferredSize(sessionCreateView.getSize());
 		return(sessionCreateView);
 	}
-	
+
 	public MainClientView getMainClientView(){
 		mainClientView = new MainClientView(
 				new MainClientModel(user));
@@ -87,29 +87,29 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 		mainClientView.setPreferredSize(mainClientView.getSize());
 		return(mainClientView);
 	}
-	
-//	public IdeaPageView getIdeaPageView(){
-//		ideaPageView = new IdeaPageView();
-//		ideaPageView.addComponentListener(this);
-//		ideaPageView.setPreferredSize(ideaPageView.getSize());
-//		return(ideaPageView);
-//	}
-	
+
+	//	public IdeaPageView getIdeaPageView(){
+	//		ideaPageView = new IdeaPageView();
+	//		ideaPageView.addComponentListener(this);
+	//		ideaPageView.setPreferredSize(ideaPageView.getSize());
+	//		return(ideaPageView);
+	//	}
+
 	public TextCreateView getTextCreateView(){
 		textCreateView = new TextCreateView();
 		textCreateView.addComponentListener(this);
 		textCreateView.setPreferredSize(textCreateView.getSize());
 		return(textCreateView);
-		
+
 	}	
 	@Override
 	public void componentHidden(ComponentEvent e){
 		if (e.getSource() == loginView){
 			mainPanel.remove(loginView);
-			if(loginView.addRegPanel()){
+			if (loginView.addRegPanel()){
 				mainPanel.add(getRegView(), BorderLayout.CENTER);
 			}
-			else{
+			else {
 				user = new User(loginView.getModel().getUser(),
 						loginView.getModel().getPass());
 				mainPanel.add(getSessionListView(), BorderLayout.CENTER);
@@ -131,10 +131,10 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 				mainPanel.add(getMainClientView(), BorderLayout.CENTER);
 			}	
 		}
-		
+
 		if (e.getSource() == sessionCreateView){
 			mainPanel.remove(sessionCreateView);
-			if(sessionCreateView.addCancel()){
+			if (sessionCreateView.addCancel()){
 				mainPanel.add(getSessionListView(),BorderLayout.CENTER);
 			}
 			else{
@@ -151,20 +151,20 @@ public class ViewOrganizer extends JPanel implements ComponentListener
 	@Override
 	public void componentMoved(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		window.validate();
 		window.pack();
-		
+
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
