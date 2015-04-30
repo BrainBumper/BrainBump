@@ -63,6 +63,13 @@ public class SocketClient {
 		writer.newLine();
 		writer.flush();
 	}
+	
+	public void sendServerInfo(int numPeople, String name, String password)
+			throws IOException{
+		BufferedWriter writer = new BufferedWriter(
+				new OutputStreamWriter(socketClient.getOutputStream()));
+		writer.write("updateserverinfo");
+	}
 
 	public String getUsername(){
 		return username;
