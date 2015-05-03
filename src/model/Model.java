@@ -1,51 +1,48 @@
+package model;
+
+import javax.accessibility.AccessibleContext;
+import javax.swing.JTextArea;
+
+import View.ChatView;
+import user.User;
+
+//JRE System Library [CDC-1.1/Foundation-1.1] Change
 
 public class Model {
 	
-	
-	User aa = new User(1), bb = new User(1), cc = new User(1), dd = new User(1), ee = new User(1), ff = new User(1);
-	Idea a = new Idea(1), b = new Idea(1), c = new Idea(1), d = new Idea(1), e = new Idea(1), f = new Idea(1), g= new Idea(1), h= new Idea(1);
 	String name;
-	Collection ideas;
-	Collection users;
+	Idea[] ideas;
+	User[] users;
 	int numUsers = 0, numIdeas = 0;
-	Collection[] groups;
+	Idea[][] groups;
 	ChatView chat;
 	
 	public Model(){
 		
 		name = "BrainBumpTest";
 		chat = new ChatView();
-		a.setOrder(0);
-		b.setOrder(1);
-		c.setOrder(2);
-		d.setOrder(3);
-		e.setOrder(4);
-		f.setOrder(5);
-		g.setOrder(6);
-		h.setOrder(7);
-		
-	}
-	
-	public Model(int n){
-		name = "BrainBumpTest";
-		chat = new ChatView();
 		numIdeas=0;
 		numUsers=0;
+		
 	}
 	
 	
 	public void showInfo(){
+		
 		for(int i = 0; i < numIdeas;i++){
-			Idea cur = (Idea) ideas.getElement(i);
-			System.out.println(cur.getString()+"|"+cur.getRating()+"|");
+			Idea cur = ideas[i];
+			System.out.println(cur.getString()+"|"+cur.getRating()+"|"+cur.getDoc().getPath());
 		}
 		for(int i = 0; i < numUsers;i++){
-			User cur = (User) users.getElement(i);
-			System.out.println(cur.getID()+"|"+cur.getPass());
+			User cur = users[i];
+			System.out.println(cur.getUsername()+"|"+cur.getPassword());
 		}
-		String[] coms = chat.getAccesible();	//Get text from JTextArea and store the data
-		for(int i = 0; i < chat.getNumComments();i++){
-			System.out.println(coms[i]);
+		
+		JTextArea textArea = chat.getTextArea();
+		String chatText = textArea.getText();
+		String[] texts = chatText.split("<");
+		for(int i = 1; i < texts.length;i++){
+			System.out.println("<"+texts[i]);
 		}
 	}
 	
@@ -58,7 +55,7 @@ public class Model {
 		this.chat = chat;
 	}
 
-	public Collection[] getGroups(){
+	public Idea[][] getGroups(){
 		return groups;
 	}
 	
@@ -74,18 +71,18 @@ public class Model {
 		return name;
 	}
 	
-	public Collection getIdeas(){
+	public Idea[] getIdeas(){
 		return ideas;
 	}
 	public void addIdea(Idea i){
-		ideas.add(i);
+		ideas[numIdeas] = i;
 	}
 	
-	public Collection getUsers(){
+	public User[] getUsers(){
 		return users;
 	}
 	public void addUser(User u){
-		users.add(u);
+		users[numUsers] = u;
 	}
 
 	public int getNumUsers() {
@@ -98,6 +95,17 @@ public class Model {
 	
 	
 	public static void main(String[] args){
+		
+		Model mm = new Model();
+		JTextArea ta = mm.chat.getTextArea();
+		ta.setText("<Username>: Other words. \n <New line user>: other stuff");
+		
+		JTextArea textArea = ta;
+		String chatText = textArea.getText();
+		String[] texts = chatText.split("<");
+		for(int i = 1; i < texts.length;i++){
+			System.out.println("<"+texts[i]);
+		}
 		
 	}
 }
