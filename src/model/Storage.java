@@ -1,3 +1,5 @@
+package model;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,7 +45,7 @@ public class Storage {
 		
 		String[] compactUsers = new String[session.getNumUsers()];		//Users
 		for(int i = 0; i < session.getNumUsers(); i++){
-			compactUsers[i] = session.getUsers()[i].getID()+"|"+session.getUsers()[i].getPass();
+			compactUsers[i] = session.getUsers()[i].getUsername()+"|"+session.getUsers()[i].getPassword();
 		}
 		
 		String[] compactChat = new String[session.getChatWindow().getNumComments()];	//Chat

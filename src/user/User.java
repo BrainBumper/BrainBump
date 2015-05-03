@@ -47,6 +47,10 @@ public class User
 		return username;
 	}
 	
+	public String getPassword(){
+		return password;
+	}
+	
 	public void setAdmin(boolean admin){
 		this.admin = admin;
 	}
