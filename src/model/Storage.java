@@ -1,3 +1,4 @@
+package model;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,16 +8,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.swing.JTextArea;
+
+import user.User;
+
 public class Storage {
 	
-	Session session;
+	Model session;
 	File file;
 	
 	public Storage(int n) throws IOException{	//Test constructor
-		session = new Session();
+		session = new Model();
 		save();
 		System.out.println("\n=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-		session = new Session(1);
+		session = new Model();
 		open(session.getName());
 	}
 	
@@ -43,12 +48,16 @@ public class Storage {
 		
 		String[] compactUsers = new String[session.getNumUsers()];		//Users
 		for(int i = 0; i < session.getNumUsers(); i++){
-			compactUsers[i] = session.getUsers()[i].getID()+"|"+session.getUsers()[i].getPass();
+			compactUsers[i] = session.getUsers()[i].getUsername()+"|"+session.getUsers()[i].getPassword();
 		}
 		
-		String[] compactChat = new String[session.getChatWindow().getNumComments()];	//Chat
-		for(int i = 0; i < session.getChatWindow().getNumComments(); i++){
-			compactChat[i] = session.getChatWindow().getComments()[i];
+		
+		JTextArea textArea = session.getChatView().getTextArea();
+		String chatText = textArea.getText();
+		String[] texts = chatText.split("<");
+		String[] compactChat = new String[texts.length-1];
+		for(int i = 1; i < texts.length;i++){
+			compactChat[i-1] = "<"+texts[i];
 		}
 		
 		try{			//Writing into the file
@@ -101,16 +110,17 @@ public class Storage {
 				
 				session.addIdea(current);
 			}else if(what.equals("Users")){						//Stored user
-				User current = new User(1);
+				
 				working = line.substring(line.indexOf(":")+1);
 				String[] sp = working.split("\\|");
-				current.setID(sp[0]);
-				current.setPass(sp[1]);
+				User current = new User(sp[0],sp[1]);
 				session.addUser(current);
 			}else if(what.equals("Chat")){						//Stored chat comments
-				ChatWindow current = session.getChatWindow();
+				
+				JTextArea textArea = session.getChatView().getTextArea();
 				working = line.substring(line.indexOf(":")+1);
-				current.addCom(working);
+				textArea.append(working+"\n");
+				
 			}
 			line = saveFile.readLine();
 		}
@@ -118,13 +128,14 @@ public class Storage {
 		session.showInfo();			//Check reloaded content
 	}
 	
-//	public static void main(String[] args){
-//		try {
-//			new Storage(1);
-//		} catch (IOException e) {
-//			System.out.println("Save failed");
-//			e.printStackTrace();
-//		}
-//	}
+	public static void main(String[] args){
+		try {
+			new Storage(1);
+		} catch (IOException e) {
+			System.out.println("Save failed");
+			e.printStackTrace();
+		}
+		
+	}
 	
 }
