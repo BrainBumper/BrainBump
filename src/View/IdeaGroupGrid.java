@@ -7,15 +7,21 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import java.awt.*;
+
 import javax.swing.*;
+
+import model.MainClientModel;
 
 public class IdeaGroupGrid extends JPanel
 {
 	JPanel gridPanel = new JPanel();
 	
-	public IdeaGroupGrid()
+	private MainClientModel model;
+	
+	public IdeaGroupGrid(MainClientModel model)
 	{
 		super(new BorderLayout());
+		this.model = model;
 		setBorder(new TextBubbleBorder(Color.blue, 5, 10, 0));
 		
 		JButton topic = new JButton("TOPIC: Lemonade Stands");
@@ -31,8 +37,8 @@ public class IdeaGroupGrid extends JPanel
 	
 	private void placeIdeas(JPanel grid)
 	{
-		grid.add(new IdeaPanel("Location", 3));
-		grid.add(new IdeaPanel("Ingredients", 1));
-		grid.add(new IdeaPanel("Marketing", 5));
+		grid.add(new IdeaPanel("Location", 3, model));
+		grid.add(new IdeaPanel("Ingredients", 1, model));
+		grid.add(new IdeaPanel("Marketing", 5, model));
 	}
 }

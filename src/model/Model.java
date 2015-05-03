@@ -3,7 +3,7 @@ package model;
 import javax.accessibility.AccessibleContext;
 import javax.swing.JTextArea;
 
-import View.ChatView;
+import view.ChatView;
 import user.User;
 
 //JRE System Library [CDC-1.1/Foundation-1.1] Change
@@ -20,7 +20,7 @@ public class Model {
 	public Model(){
 		
 		name = "BrainBumpTest";
-		chat = new ChatView();
+		//chat = new ChatView();
 		numIdeas=0;
 		numUsers=0;
 		

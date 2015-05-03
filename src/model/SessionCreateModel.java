@@ -10,7 +10,7 @@ public class SessionCreateModel {
 		this.user = user;
 	}
 	
-	public void setServer(SocketServer server){
-		user.setServer(server);
+	public void setServer(int port, int numPpl, String name, String password){
+		user.setServer(new SocketServer(port, numPpl, name, password));
 	}
 }

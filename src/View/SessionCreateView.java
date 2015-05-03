@@ -71,8 +71,10 @@ public class SessionCreateView extends JPanel
 	}
 	
 	private void controlModel(){
-		model.setServer(new SocketServer(6780, (Integer)table.getValueAt(0, 1),
-				(String)table.getValueAt(0,0), (String)table.getValueAt(0,2)));
+		
+		
+		model.setServer(6780, (Integer)table.getValueAt(0, 1),
+				(String)table.getValueAt(0,0), (String)table.getValueAt(0,2));
 	}
 	
 	 class MyTableModel extends AbstractTableModel {
